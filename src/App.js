@@ -20,15 +20,6 @@ class App extends Component {
   }
   
   componentDidMount() {
-    // example of making an API request to the LCBO API
-    // fetchLcboEndpoint("products", {
-    //   q: "radler"
-    // }).then(data => {
-    //   this.setState({
-    //     isLoading: false,
-    //     products: data.result
-    //   });
-    // });
   }
 
   render() {
