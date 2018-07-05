@@ -2,7 +2,11 @@ import React, { Component } from "react";
 
 import { fetchLcboEndpoint } from "./api/lcbo.js";
 
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+
+const { REACT_APP_GOOGLE_MAPS_API_KEY } = process.env;
+
+const GOOGLE_API_URL = `https://maps.googleapis.com/maps/api/js?key=${REACT_APP_GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
 
 class App extends Component {
   
@@ -94,7 +98,7 @@ class App extends Component {
       show 
       ? <MyMapComponent 
         list={list}
-        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
+        googleMapURL={GOOGLE_API_URL}
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `400px` }} />}
         mapElement={<div style={{ height: `100%` }} />}
