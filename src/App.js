@@ -4,7 +4,7 @@ import { fetchLcboEndpoint } from "./api/lcbo.js";
 
 import Map from "./components/map/Map";
 import Product from "./components/product/Product";
-import Container from "./components/product/Container";
+import Container from "./components/Container";
 
 class App extends Component {
   
