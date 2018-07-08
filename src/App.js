@@ -39,21 +39,24 @@ class App extends Component {
     });
     
     fetchLcboEndpoint("products", {
-      q: searchTerm
+      q: searchTerm,
+      where_not: "is_dead"
     }).then((data) => {
-      
+      console.log(data.result);
       if (data.result.length === 0) {
         this.setState({ errorMsg: "Oops! There are no products with that keyword. Are you sure you haven't had too much to drink already?" });
         return;
       }
 
       const productList = 
-        data.result.map((product) => 
-        ({ 
-          id: product.id, 
-          name: product.name
-        })
-      );
+        data.result
+          .filter((product) => product.inventory_count && product.inventory_count > 0)
+          .map((product) => 
+            ({ 
+              id: product.id, 
+              name: product.name
+            })
+          );
 
       this.setState({
         inventory: productList,
@@ -82,7 +85,7 @@ class App extends Component {
 
       const storeList = 
         data.result
-          .filter((store) => !store.is_dead && store.inventory_count > 0)
+          .filter((store) => !store.is_dead && store.inventory_count && store.inventory_count > 0)
           .map((store) => 
             ({
               id: store.id, 
