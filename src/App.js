@@ -13,26 +13,43 @@ class App extends Component {
     this.state = {
       searchTerm: "",
       inventory: [],
-      isLoading: false
+      stores: [],
+      isLoading: false,
+      errorMsg: ""
     };
   }
   
   onSearchSubmit = (e) => {
     
+    const { searchTerm } = this.state;
+
     e.preventDefault();
+
+    if (searchTerm.length === 0) {
+      this.setState({ errorMsg: "Please enter a keyword to search for booze." });
+      return;
+    }
     
-    this.setState({ isLoading: true });
+    this.setState({ 
+      isLoading: true, 
+      inventory: [], 
+      stores: [] 
+    });
     
     fetchLcboEndpoint("products", {
-      q: this.state.searchTerm
+      q: searchTerm
     }).then((data) => {
       
+      if (data.result.length === 0) {
+        this.setState({ errorMsg: "Oops! There are no products with that keyword. Are you sure you haven't had too much to drink already?" });
+        return;
+      }
+
       const productList = 
         data.result.map((product) => 
         ({ 
           id: product.id, 
-          name: product.name, 
-          clicked: false 
+          name: product.name
         })
       );
 
@@ -41,7 +58,9 @@ class App extends Component {
         isLoading: false
       });
 
-    });
+    }).catch((err) => 
+      this.setState({ errorMsg: "Oops! The ship with all the booze has crashed x_x" })
+    );
   }
 
   onSearchChange = (e) => {
@@ -59,6 +78,7 @@ class App extends Component {
           .map((store) => 
             ({
               id: store.id, 
+              name: store.name,
               lat: store.latitude, 
               long: store.longitude 
             })
@@ -67,30 +87,42 @@ class App extends Component {
       const productList = 
         this.state.inventory.map((prod) => 
           prod.id === product.id 
-          ? { ...prod, clicked: !prod.clicked, stores: storeList }
+          ? { ...prod, stores: storeList }
           : prod
         );
 
-      this.setState({ inventory: productList });
-    });
+      this.setState({ 
+        inventory: productList, 
+        stores: storeList 
+      });
+
+    }).catch((err) => 
+      this.setState({ errorMsg: "Something's gone wrong... Bandits are pillaging the stores!" })
+    );
 
   }
-
+  
   render() {
 
-    const { searchTerm, inventory, isLoading } = this.state;
+    const { 
+      searchTerm, 
+      inventory, 
+      stores, 
+      isLoading, 
+      errorMsg 
+    } = this.state;
 
     const renderList = () => inventory.map((item) => 
       <Container key={item.id}>
         <Product 
           onProductClick={this.fetchStores}
           product={item}/>
-        <Map show={item.clicked} stores={item.stores} />
       </Container>
     );
 
     return (
       <div>
+        <h1>Quench It!</h1>
         <form onSubmit={this.onSearchSubmit}>
           <input 
             type="text"
@@ -98,7 +130,14 @@ class App extends Component {
             onChange={this.onSearchChange} />
           <button type="submit">Search</button>
         </form>
-        { isLoading ? "Loading..." : renderList() }
+        { 
+          errorMsg.length > 0 
+          ? errorMsg 
+          : isLoading 
+            ? "Loading..." 
+            : renderList() 
+        }
+        <Map stores={stores} />
       </div>
     
     );
