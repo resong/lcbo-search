@@ -13,7 +13,7 @@ class App extends Component {
     this.state = {
       searchTerm: "",
       inventory: [],
-      stores: [],
+      storesToDisplay: [],
       isLoading: false,
       errorMsg: ""
     };
@@ -33,7 +33,7 @@ class App extends Component {
     this.setState({ 
       isLoading: true, 
       inventory: [], 
-      stores: [] 
+      storesToDisplay: [] 
     });
     
     fetchLcboEndpoint("products", {
@@ -68,6 +68,12 @@ class App extends Component {
   }
 
   fetchStores = (product) => {
+
+    if (product.stores && product.stores.length > 0) {
+      this.setState({ storesToDisplay: product.stores });
+      return;
+    }
+
     fetchLcboEndpoint("stores", {
       product_id: product.id
     }).then((data) => {
@@ -93,7 +99,7 @@ class App extends Component {
 
       this.setState({ 
         inventory: productList, 
-        stores: storeList 
+        storesToDisplay: storeList 
       });
 
     }).catch((err) => 
@@ -107,16 +113,16 @@ class App extends Component {
     const { 
       searchTerm, 
       inventory, 
-      stores, 
+      storesToDisplay, 
       isLoading, 
       errorMsg 
     } = this.state;
 
-    const renderList = () => inventory.map((item) => 
-      <Container key={item.id}>
+    const renderList = () => inventory.map((store) => 
+      <Container key={store.id}>
         <Product 
           onProductClick={this.fetchStores}
-          product={item}/>
+          product={store}/>
       </Container>
     );
 
@@ -137,7 +143,7 @@ class App extends Component {
             ? "Loading..." 
             : renderList() 
         }
-        <Map stores={stores} />
+        <Map stores={storesToDisplay} />
       </div>
     
     );
