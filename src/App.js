@@ -6,12 +6,6 @@ import Map from "./components/map/Map";
 import Product from "./components/product/Product";
 import Container from "./components/product/Container";
 
-// import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
-
-// const { REACT_APP_GOOGLE_MAPS_API_KEY } = process.env;
-
-// const GOOGLE_API_URL = `https://maps.googleapis.com/maps/api/js?key=${REACT_APP_GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
-
 class App extends Component {
   
   constructor(props) {
@@ -79,10 +73,6 @@ class App extends Component {
 
       this.setState({ inventory: productList });
     });
-
-  }
-
-  handleStoreFetch = () => {
 
   }
 
