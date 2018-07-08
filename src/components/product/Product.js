@@ -1,5 +1,7 @@
 import React from "react";
 
+import "./Product.css";
+
 const Product = ({ onProductClick, product }) => {
  
   const handleClick = () => {
@@ -7,9 +9,9 @@ const Product = ({ onProductClick, product }) => {
   }
 
   return (
-    <div onClick={handleClick}>
+    <a onClick={handleClick}>
         { product.name }
-    </div>
+    </a>
   )
 };
 

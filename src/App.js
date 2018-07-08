@@ -2,9 +2,10 @@ import React, { Component } from "react";
 
 import { fetchLcboEndpoint } from "./api/lcbo.js";
 
+import "./App.css";
+
 import Map from "./components/map/Map";
 import Product from "./components/product/Product";
-import Container from "./components/Container";
 
 class App extends Component {
   
@@ -33,7 +34,8 @@ class App extends Component {
     this.setState({ 
       isLoading: true, 
       inventory: [], 
-      storesToDisplay: [] 
+      storesToDisplay: [],
+      errorMsg: "" 
     });
     
     fetchLcboEndpoint("products", {
@@ -119,31 +121,42 @@ class App extends Component {
     } = this.state;
 
     const renderList = () => inventory.map((store) => 
-      <Container key={store.id}>
+      // <Container key={store.id}>
         <Product 
+          key={store.id}
           onProductClick={this.fetchStores}
           product={store}/>
-      </Container>
+      // </Container>
     );
 
     return (
-      <div>
+      <div className="container">
         <h1>Quench It!</h1>
-        <form onSubmit={this.onSearchSubmit}>
-          <input 
-            type="text"
-            value={searchTerm}
-            onChange={this.onSearchChange} />
-          <button type="submit">Search</button>
-        </form>
-        { 
-          errorMsg.length > 0 
-          ? errorMsg 
-          : isLoading 
-            ? "Loading..." 
-            : renderList() 
-        }
-        <Map stores={storesToDisplay} />
+        <div className="row">
+          <div className="column left">
+            <form onSubmit={this.onSearchSubmit}>
+              <input 
+                type="text"
+                value={searchTerm}
+                onChange={this.onSearchChange} />
+              <button type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+        <div className="row">
+          <div className="column left list">
+            {  
+              errorMsg.length > 0 
+              ? <span className="error">{ errorMsg }</span>
+              : isLoading
+                ? <span>Loading...</span>
+                : renderList()
+            }
+          </div>
+          <div className="column right">
+            <Map stores={storesToDisplay} />
+          </div>
+        </div>
       </div>
     
     );

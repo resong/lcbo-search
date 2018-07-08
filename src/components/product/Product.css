@@ -1,0 +1,11 @@
+a {
+    color: olive;
+    display: block;
+    margin: .5em;
+    padding: .5em;
+}
+
+a:hover {
+    color: darkgrey;
+    cursor: pointer;
+}

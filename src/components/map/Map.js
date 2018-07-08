@@ -9,7 +9,7 @@ const Map = ({ stores }) => (
       list={stores}
       googleMapURL={GOOGLE_API_URL}
       loadingElement={<div style={{ height: `100%` }} />}
-      containerElement={<div style={{ height: `400px` }} />}
+      containerElement={<div style={{ height: `500px`, width: `100%` }} />}
       mapElement={<div style={{ height: `100%` }} />}
     />       
 );
